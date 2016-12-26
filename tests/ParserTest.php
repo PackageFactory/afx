@@ -78,4 +78,57 @@ class ParserTest extends TestCase
 			'children' => []
 		], $parser->parse());
 	}
+
+	/**
+	 * @test
+	 */
+	public function shouldParseSingleTagWithSeparateClosingTag()
+	{
+		$parser = new Parser('<div></div>');
+		$this->assertEquals([
+			'identifier' => 'div',
+			'props' => [],
+			'children' => []
+		], $parser->parse());
+	}
+
+	/**
+	 * @test
+	 */
+	public function shouldParseSingleTagWithSeparateClosingTagAndOneChild()
+	{
+		$parser = new Parser('<div>Hello World!</div>');
+		$this->assertEquals([
+			'identifier' => 'div',
+			'props' => [],
+			'children' => [
+				[
+					'type' => 'text',
+					'payload' => 'Hello World!'
+				]
+			]
+		], $parser->parse());
+	}
+
+	/**
+	 * @test
+	 */
+	public function shouldParseNestedSelfClosingTag()
+	{
+		$parser = new Parser('<div><input/></div>');
+		$this->assertEquals([
+			'identifier' => 'div',
+			'props' => [],
+			'children' => [
+				[
+					'type' => 'node',
+					'payload' => [
+						'identifier' => 'input',
+						'props' => [],
+						'children' => []
+					]
+				]
+			]
+		], $parser->parse());
+	}
 }
