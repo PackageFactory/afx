@@ -1,0 +1,19 @@
+{
+    "name": "packagefactory/jsxparser",
+    "description": "A JSX parser for PHP",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Wilhelm Behncke",
+            "email": "wilhelm.behncke@googlemail.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    },
+	"autoload": {
+        "psr-4": { "PackageFactory\\JsxParser\\": "src/" }
+    }
+}
