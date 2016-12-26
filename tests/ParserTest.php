@@ -56,4 +56,26 @@ class ParserTest extends TestCase
 			'children' => []
 		], $parser->parse());
 	}
+
+	/**
+	 * @test
+	 */
+	public function propsCanHaveDashesInTheirName()
+	{
+		$parser = new Parser('<div prop-1="value" prop-2="Another Value"/>');
+		$this->assertEquals([
+			'identifier' => 'div',
+			'props' => [
+				'prop-1' => [
+					'type' => 'string',
+					'payload' => 'value'
+				],
+				'prop-2' => [
+					'type' => 'string',
+					'payload' => 'Another Value'
+				]
+			],
+			'children' => []
+		], $parser->parse());
+	}
 }
