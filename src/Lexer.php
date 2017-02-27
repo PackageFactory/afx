@@ -1,8 +1,8 @@
 <?php
-namespace PackageFactory\JsxParser;
+namespace PackageFactory\Afx;
 
 /**
- * A primitive lexer that recognizes Jsx-specific characters while iterating
+ * A primitive lexer that recognizes Afx-specific characters while iterating
  * through a string
  */
 class Lexer

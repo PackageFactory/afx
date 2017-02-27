@@ -1,6 +1,6 @@
 {
-    "name": "packagefactory/jsxparser",
-    "description": "A JSX parser for PHP",
+    "name": "packagefactory/afx",
+    "description": "An Afx parser for PHP",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -14,6 +14,9 @@
         "phpunit/phpunit": "^5.7"
     },
 	"autoload": {
-        "psr-4": { "PackageFactory\\JsxParser\\": "src/" }
+        "psr-4": { "PackageFactory\\Afx\\": "src/" }
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit"
     }
 }

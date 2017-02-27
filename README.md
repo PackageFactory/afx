@@ -1,5 +1,5 @@
-# packagefactory/jsxparser
+# packagefactory/afx
 
-> A JSX parser for PHP
+> An Afx parser for PHP
 
 Nothing to see hee yet.

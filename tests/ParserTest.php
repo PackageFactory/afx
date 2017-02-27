@@ -1,6 +1,6 @@
 <?php
 use PHPUnit\Framework\TestCase;
-use PackageFactory\JsxParser\Parser;
+use PackageFactory\Afx\Parser;
 
 class ParserTest extends TestCase
 {
