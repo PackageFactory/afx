@@ -17,7 +17,8 @@ class Identifier
 			$lexer->isDot() ||
 			$lexer->isColon() ||
 			$lexer->isMinus() ||
-			$lexer->isUnderscore()
+			$lexer->isUnderscore() ||
+			$lexer->isAt()
 		) {
 			$identifier .= $lexer->consume();
 		}

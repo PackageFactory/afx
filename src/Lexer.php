@@ -91,6 +91,16 @@ class Lexer
 	}
 
 	/**
+	 * Checks if the current character is a @
+	 *
+	 * @return boolean
+	 */
+	public function isAt()
+	{
+		return $this->currentCharacter === '@';
+	}
+
+	/**
 	 * Checks if the current character is a minus
 	 *
 	 * @return boolean
