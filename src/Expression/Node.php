@@ -20,10 +20,12 @@ class Node
 		$children = [];
 
 		if ($lexer->isWhitespace()) {
+			while($lexer->isWhitespace()) {
+				$lexer->consume();
+			}
 			while(!$lexer->isForwardSlash() && !$lexer->isClosingBracket()) {
 				list($propIdentifier, $value) = Prop::parse($lexer);
 				$props[$propIdentifier] = $value;
-
 				while($lexer->isWhitespace()) {
 					$lexer->consume();
 				}
