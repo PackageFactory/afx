@@ -4,12 +4,52 @@ use PackageFactory\Afx\Parser;
 
 class ParserTest extends TestCase
 {
+
+	/**
+	 * @test
+	 */
+	public function shouldParseSingleTag()
+	{
+		$parser = new Parser('<div></div>');
+		$this->assertEquals([
+			'identifier' => 'div',
+			'props' => [],
+			'children' => []
+		], $parser->parse());
+	}
+
 	/**
 	 * @test
 	 */
 	public function shouldParseSingleSelfClosingTag()
 	{
 		$parser = new Parser('<div/>');
+		$this->assertEquals([
+			'identifier' => 'div',
+			'props' => [],
+			'children' => []
+		], $parser->parse());
+	}
+
+	/**
+	 * @test
+	 */
+	public function shouldParseSingleSelfClosingTagWithWhitespaces()
+	{
+		$parser = new Parser('<div   />');
+		$this->assertEquals([
+			'identifier' => 'div',
+			'props' => [],
+			'children' => []
+		], $parser->parse());
+	}
+
+	/**
+	 * @test
+	 */
+	public function shouldParseSingleTagWithWhitespaces()
+	{
+		$parser = new Parser('<div   ></div>');
 		$this->assertEquals([
 			'identifier' => 'div',
 			'props' => [],
@@ -41,6 +81,28 @@ class ParserTest extends TestCase
 	public function shouldParseSingleSelfClosingTagWithMultipleAttributes()
 	{
 		$parser = new Parser('<div prop="value" anotherProp="Another Value"/>');
+		$this->assertEquals([
+			'identifier' => 'div',
+			'props' => [
+				'prop' => [
+					'type' => 'string',
+					'payload' => 'value'
+				],
+				'anotherProp' => [
+					'type' => 'string',
+					'payload' => 'Another Value'
+				]
+			],
+			'children' => []
+		], $parser->parse());
+	}
+
+	/**
+	 * @test
+	 */
+	public function shouldParseSingleSelfClosingTagWithMultipleAttributesWrappedByMultipleWhitespaces()
+	{
+		$parser = new Parser('<div   prop="value"    anotherProp="Another Value"  />');
 		$this->assertEquals([
 			'identifier' => 'div',
 			'props' => [
