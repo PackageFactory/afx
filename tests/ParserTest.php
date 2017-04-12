@@ -14,7 +14,8 @@ class ParserTest extends TestCase
 		$this->assertEquals([
 			'identifier' => 'div',
 			'props' => [],
-			'children' => []
+			'children' => [],
+			'selfClosing' => false
 		], $parser->parse());
 	}
 
@@ -27,7 +28,8 @@ class ParserTest extends TestCase
 		$this->assertEquals([
 			'identifier' => 'div',
 			'props' => [],
-			'children' => []
+			'children' => [],
+			'selfClosing' => true
 		], $parser->parse());
 	}
 
@@ -40,7 +42,8 @@ class ParserTest extends TestCase
 		$this->assertEquals([
 			'identifier' => 'div',
 			'props' => [],
-			'children' => []
+			'children' => [],
+			'selfClosing' => true
 		], $parser->parse());
 	}
 
@@ -53,7 +56,8 @@ class ParserTest extends TestCase
 		$this->assertEquals([
 			'identifier' => 'div',
 			'props' => [],
-			'children' => []
+			'children' => [],
+			'selfClosing' => false
 		], $parser->parse());
 	}
 
@@ -71,7 +75,8 @@ class ParserTest extends TestCase
 					'payload' => 'value'
 				]
 			],
-			'children' => []
+			'children' => [],
+			'selfClosing' => true
 		], $parser->parse());
 	}
 
@@ -93,7 +98,8 @@ class ParserTest extends TestCase
 					'payload' => 'Another Value'
 				]
 			],
-			'children' => []
+			'children' => [],
+			'selfClosing' => true
 		], $parser->parse());
 	}
 
@@ -115,7 +121,8 @@ class ParserTest extends TestCase
 					'payload' => 'Another Value'
 				]
 			],
-			'children' => []
+			'children' => [],
+			'selfClosing' => true
 		], $parser->parse());
 	}
 
@@ -137,7 +144,8 @@ class ParserTest extends TestCase
 					'payload' => 'Another Value'
 				]
 			],
-			'children' => []
+			'children' => [],
+			'selfClosing' => true
 		], $parser->parse());
 	}
 
@@ -150,7 +158,8 @@ class ParserTest extends TestCase
 		$this->assertEquals([
 			'identifier' => 'div',
 			'props' => [],
-			'children' => []
+			'children' => [],
+			'selfClosing' => false
 		], $parser->parse());
 	}
 
@@ -168,7 +177,8 @@ class ParserTest extends TestCase
 					'type' => 'text',
 					'payload' => 'Hello World!'
 				]
-			]
+			],
+			'selfClosing' => false
 		], $parser->parse());
 	}
 
@@ -187,10 +197,12 @@ class ParserTest extends TestCase
 					'payload' => [
 						'identifier' => 'input',
 						'props' => [],
-						'children' => []
+						'children' => [],
+						'selfClosing' => true
 					]
 				]
-			]
+			],
+			'selfClosing' => false
 		], $parser->parse());
 	}
 
@@ -220,10 +232,12 @@ class ParserTest extends TestCase
 											'type' => 'text',
 											'payload' => 'Header'
 										]
-									]
+									],
+									'selfClosing' => false
 								]
 							]
-						]
+						],
+						'selfClosing' => false
 					]
 				],
 				[
@@ -236,7 +250,8 @@ class ParserTest extends TestCase
 								'type' => 'text',
 								'payload' => 'Content'
 							]
-						]
+						],
+						'selfClosing' => false
 					]
 				],
 				[
@@ -255,20 +270,23 @@ class ParserTest extends TestCase
 											'type' => 'text',
 											'payload' => 'Footer'
 										]
-									]
+									],
+									'selfClosing' => false
 								]
 							]
-						]
+						],
+						'selfClosing' => false
 					]
 				]
-			]
+			],
+			'selfClosing' => false
 		], $parser->parse());
 	}
 
 	/**
 	 * @test
 	 */
-	public function shouldHandletWhitespace()
+	public function shouldHandleWhitespace()
 	{
 		$parser = new Parser('   <div>
 							<input/>
@@ -290,7 +308,8 @@ class ParserTest extends TestCase
 					'payload' => [
 						'identifier' => 'input',
 						'props' => [],
-						'children' => []
+						'children' => [],
+						'selfClosing' => true
 					]
 				],
 				[
@@ -310,7 +329,8 @@ class ParserTest extends TestCase
 
 					Text'
 							]
-						]
+						],
+						'selfClosing' => false
 					]
 				],
 				[
@@ -318,7 +338,8 @@ class ParserTest extends TestCase
 					'payload' => '
 							     '
 				]
-			]
+			],
+			'selfClosing' => false
 		], $parser->parse());
 	}
 }

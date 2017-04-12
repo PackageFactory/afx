@@ -41,7 +41,8 @@ class Node
 				return [
 					'identifier' => $identifier,
 					'props' => $props,
-					'children' => $children
+					'children' => $children,
+					'selfClosing' => true
 				];
 			}
 		}
@@ -73,7 +74,8 @@ class Node
 				return [
 					'identifier' => $identifier,
 					'props' => $props,
-					'children' => $children
+					'children' => $children,
+					'selfClosing' => false
 				];
 			}
 		}
