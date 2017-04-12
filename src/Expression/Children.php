@@ -5,60 +5,60 @@ use PackageFactory\Afx\Lexer;
 
 class Children
 {
-	public static function parse(Lexer $lexer)
-	{
-		$contents = [];
-		$currentText = '';
-		while(!$lexer->isEnd()) {
-			if ($lexer->isOpeningBracket()) {
-				$lexer->consume();
+    public static function parse(Lexer $lexer)
+    {
+        $contents = [];
+        $currentText = '';
+        while (!$lexer->isEnd()) {
+            if ($lexer->isOpeningBracket()) {
+                $lexer->consume();
 
-				if ($lexer->isForwardSlash()) {
-					$lexer->rewind();
-					if ($currentText) {
-						$contents[] = [
-							'type' => 'text',
-							'payload' => $currentText
-						];
-					}
-					return $contents;
-				} else {
-					$lexer->rewind();
+                if ($lexer->isForwardSlash()) {
+                    $lexer->rewind();
+                    if ($currentText) {
+                        $contents[] = [
+                            'type' => 'text',
+                            'payload' => $currentText
+                        ];
+                    }
+                    return $contents;
+                } else {
+                    $lexer->rewind();
 
-					if ($currentText) {
-						$contents[] = [
-							'type' => 'text',
-							'payload' => $currentText
-						];
-					}
-					$contents[] = [
-						'type' => 'node',
-						'payload' => Node::parse($lexer)
-					];
-					$currentText = '';
-					continue;
-				}
-			}
+                    if ($currentText) {
+                        $contents[] = [
+                            'type' => 'text',
+                            'payload' => $currentText
+                        ];
+                    }
+                    $contents[] = [
+                        'type' => 'node',
+                        'payload' => Node::parse($lexer)
+                    ];
+                    $currentText = '';
+                    continue;
+                }
+            }
 
-			if ($lexer->isOpeningBrace()) {
-				if ($currentText) {
-					$contents[] = [
-						'type' => 'text',
-						'payload' => $currentText
-					];
-				}
+            if ($lexer->isOpeningBrace()) {
+                if ($currentText) {
+                    $contents[] = [
+                        'type' => 'text',
+                        'payload' => $currentText
+                    ];
+                }
 
-				$contents[] = [
-					'type' => 'expression',
-					'payload' => Expression::parse($lexer)
-				];
-				$currentText = '';
-				continue;
-			}
+                $contents[] = [
+                    'type' => 'expression',
+                    'payload' => Expression::parse($lexer)
+                ];
+                $currentText = '';
+                continue;
+            }
 
-			$currentText .= $lexer->consume();
-		}
+            $currentText .= $lexer->consume();
+        }
 
-		return $contents;
-	}
+        return $contents;
+    }
 }
