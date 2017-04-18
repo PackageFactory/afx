@@ -1,6 +1,7 @@
 <?php
 namespace PackageFactory\Afx\Expression;
 
+use PackageFactory\Afx\Exception;
 use PackageFactory\Afx\Lexer;
 
 class Node
@@ -78,6 +79,10 @@ class Node
                     'selfClosing' => false
                 ];
             }
+        }
+
+        if ($lexer->isEnd()) {
+            throw new Exception(sprintf('Tag %s was is not closed', $identifier));
         }
     }
 }

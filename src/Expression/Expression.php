@@ -1,6 +1,7 @@
 <?php
 namespace PackageFactory\Afx\Expression;
 
+use PackageFactory\Afx\Exception;
 use PackageFactory\Afx\Lexer;
 
 class Expression
@@ -13,7 +14,11 @@ class Expression
             $lexer->consume();
         }
 
-        while (!$lexer->isEnd()) {
+        while (true) {
+            if ($lexer->isEnd()) {
+                throw new Exception('Unclosed Expression');
+            }
+
             if ($lexer->isOpeningBrace()) {
                 $braceCount++;
             }
