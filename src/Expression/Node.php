@@ -54,10 +54,6 @@ class Node
 
         $children = Children::parse($lexer);
 
-        while ($lexer->isWhitespace()) {
-            $lexer->consume();
-        }
-
         if ($lexer->isOpeningBracket()) {
             $lexer->consume();
 

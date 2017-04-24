@@ -8,9 +8,6 @@ class Identifier
     public static function parse(Lexer $lexer)
     {
         $identifier = '';
-        if ($lexer->isAlpha()) {
-            $identifier .= $lexer->consume();
-        }
 
         while ($lexer->isAlphaNumeric() ||
             $lexer->isDot() ||
