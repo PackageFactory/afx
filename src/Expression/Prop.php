@@ -1,6 +1,7 @@
 <?php
 namespace PackageFactory\Afx\Expression;
 
+use PackageFactory\Afx\Exception;
 use PackageFactory\Afx\Lexer;
 
 class Prop
@@ -12,39 +13,37 @@ class Prop
         }
 
         $identifier = Identifier::parse($lexer);
-        $value = [
-            'type' => 'boolean',
-            'payload' => false
-        ];
 
         if ($lexer->isEqualSign()) {
             $lexer->consume();
-        }
+            switch (true) {
+                case $lexer->isSingleQuote():
+                case $lexer->isDoubleQuote():
+                    $value = [
+                        'type' => 'string',
+                        'payload' => StringLiteral::parse($lexer)
+                    ];
+                    break;
 
-        switch (true) {
-            case $lexer->isSingleQuote():
-            case $lexer->isDoubleQuote():
-                $value = [
-                'type' => 'string',
-                'payload' => StringLiteral::parse($lexer)
-                ];
-                break;
-
-            case $lexer->isOpeningBrace():
-                $value = [
-                'type' => 'expression',
-                'payload' => Expression::parse($lexer)
-                ];
-                break;
-
-            case $lexer->isWhiteSpace():
-            case $lexer->isForwardSlash():
-            case $lexer->isClosingBracket():
-                $value = [
+                case $lexer->isOpeningBrace():
+                    $value = [
+                        'type' => 'expression',
+                        'payload' => Expression::parse($lexer)
+                    ];
+                    break;
+                default:
+                    throw new Exception(sprintf(
+                        'Prop-assignment "%s" was not followed by quotes or braces',
+                        $identifier
+                    ));
+            }
+        } elseif ($lexer->isWhiteSpace() || $lexer->isForwardSlash() || $lexer->isClosingBracket()) {
+            $value = [
                 'type' => 'boolean',
                 'payload' => true
-                ];
-                break;
+            ];
+        } else {
+            throw new Exception(sprintf('Prop identifier "%s" is neither assignment nor boolean', $identifier));
         }
 
         return [$identifier, $value];
