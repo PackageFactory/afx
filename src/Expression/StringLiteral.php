@@ -13,11 +13,13 @@ class StringLiteral
         $willBeEscaped = false;
         if ($lexer->isSingleQuote() || $lexer->isDoubleQuote()) {
             $openingQuoteSign = $lexer->consume();
+        } else {
+            throw new Exception('Unquoted String literal');
         }
 
         while (true) {
             if ($lexer->isEnd()) {
-                throw new Exception('Unclosed string literal');
+                throw new Exception(sprintf('Unfinished string literal "%s"', $contents));
             }
 
             if ($lexer->isBackSlash() && !$willBeEscaped) {

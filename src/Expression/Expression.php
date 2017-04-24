@@ -10,13 +10,16 @@ class Expression
     {
         $contents = '';
         $braceCount = 0;
+
         if ($lexer->isOpeningBrace()) {
             $lexer->consume();
+        } else {
+            throw new Exception('Expression without braces');
         }
 
         while (true) {
             if ($lexer->isEnd()) {
-                throw new Exception('Unclosed Expression');
+                throw new Exception(sprintf('Unfinished Expression "%s"', $contents));
             }
 
             if ($lexer->isOpeningBrace()) {
