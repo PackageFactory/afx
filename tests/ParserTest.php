@@ -342,4 +342,54 @@ class ParserTest extends TestCase
             'selfClosing' => false
         ], $parser->parse());
     }
+
+    /**
+     * @test
+     * @expectedException \PackageFactory\Afx\Exception
+     */
+    public function shouldThrowExceptionForUnclosedTag()
+    {
+        $parser = new Parser('<div');
+        $parser->parse();
+    }
+
+    /**
+     * @test
+     * @expectedException \PackageFactory\Afx\Exception
+     */
+    public function shouldThrowExceptionForUnclosedTagWithContent()
+    {
+        $parser = new Parser('<div>foo');
+        $parser->parse();
+    }
+
+    /**
+     * @test
+     * @expectedException \PackageFactory\Afx\Exception
+     */
+    public function shouldThrowExceptionForUnclosedStringAttribute()
+    {
+        $parser = new Parser('<div foo="bar />');
+        $parser->parse();
+    }
+
+    /**
+     * @test
+     * @expectedException \PackageFactory\Afx\Exception
+     */
+    public function shouldThrowExceptionForUnclosedAttributeExpression()
+    {
+        $parser = new Parser('<div foo={bar()/>');
+        $parser->parse();
+    }
+
+    /**
+     * @test
+     * @expectedException \PackageFactory\Afx\Exception
+     */
+    public function shouldThrowExceptionForUnclosedContentExpression()
+    {
+        $parser = new Parser('<div>{bar()</div>');
+        $parser->parse();
+    }
 }

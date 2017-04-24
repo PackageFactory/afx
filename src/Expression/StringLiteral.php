@@ -1,6 +1,7 @@
 <?php
 namespace PackageFactory\Afx\Expression;
 
+use PackageFactory\Afx\Exception;
 use PackageFactory\Afx\Lexer;
 
 class StringLiteral
@@ -14,7 +15,11 @@ class StringLiteral
             $openingQuoteSign = $lexer->consume();
         }
 
-        while (!$lexer->isEnd()) {
+        while (true) {
+            if ($lexer->isEnd()) {
+                throw new Exception('Unclosed string literal');
+            }
+
             if ($lexer->isBackSlash() && !$willBeEscaped) {
                 $willBeEscaped = true;
                 $lexer->consume();
