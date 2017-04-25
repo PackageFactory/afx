@@ -1,6 +1,7 @@
 <?php
 namespace PackageFactory\Afx\Expression;
 
+use PackageFactory\Afx\Exception;
 use PackageFactory\Afx\Lexer;
 
 class Children
@@ -9,7 +10,11 @@ class Children
     {
         $contents = [];
         $currentText = '';
-        while (!$lexer->isEnd()) {
+        while (true) {
+            if ($lexer->isEnd()) {
+                throw new Exception('Unfinished child-list');
+            }
+
             if ($lexer->isOpeningBracket()) {
                 $lexer->consume();
 
@@ -55,6 +60,8 @@ class Children
                 $currentText = '';
                 continue;
             }
+
+
 
             $currentText .= $lexer->consume();
         }
