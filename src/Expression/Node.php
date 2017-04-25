@@ -103,9 +103,8 @@ class Node
             if ($lexer->isEnd()) {
                 throw new Exception(sprintf('Tag was %s is not closed.', $identifier));
             }
-
         } catch (Exception $e) {
-            throw new Exception(sprintf('%s->%s', $identifier, $e->getMessage()));
+            throw new Exception(sprintf('<%s> %s', $identifier, $e->getMessage()));
         }
     }
 }
