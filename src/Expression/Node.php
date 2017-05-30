@@ -58,7 +58,7 @@ class Node
                 throw new Exception(sprintf('Tag "%s" did not end with closing bracket.', $identifier));
             }
 
-            $children = Children::parse($lexer);
+            $children = NodeList::parse($lexer);
 
             if ($lexer->isOpeningBracket()) {
                 $lexer->consume();
