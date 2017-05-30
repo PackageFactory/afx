@@ -4,16 +4,13 @@ namespace PackageFactory\Afx\Expression;
 use PackageFactory\Afx\Exception;
 use PackageFactory\Afx\Lexer;
 
-class Children
+class NodeList
 {
     public static function parse(Lexer $lexer)
     {
         $contents = [];
         $currentText = '';
-        while (true) {
-            if ($lexer->isEnd()) {
-                throw new Exception('Unfinished child-list');
-            }
+        while (!$lexer->isEnd()) {
 
             if ($lexer->isOpeningBracket()) {
                 $lexer->consume();
@@ -61,9 +58,14 @@ class Children
                 continue;
             }
 
-
-
             $currentText .= $lexer->consume();
+        }
+
+        if ($lexer->isEnd() && $currentText) {
+            $contents[] = [
+                'type' => 'text',
+                'payload' => $currentText
+            ];
         }
 
         return $contents;

@@ -10,6 +10,6 @@ class Parser
 
     public function parse()
     {
-        return Expression\Node::parse($this->lexer);
+        return Expression\NodeList::parse($this->lexer);
     }
 }

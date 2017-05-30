@@ -11,13 +11,24 @@ class ParserTest extends TestCase
     public function shouldParseSingleTag()
     {
         $parser = new Parser('<div></div>');
-        $this->assertEquals([
-            'identifier' => 'div',
-            'props' => [],
-            'children' => [],
-            'selfClosing' => false
-        ], $parser->parse());
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'div',
+                        'props' => [],
+                        'children' => [],
+                        'selfClosing' => false
+                    ]
+                ]
+            ],
+            $parser->parse()
+        );
     }
+
+
 
     /**
      * @test
@@ -25,12 +36,21 @@ class ParserTest extends TestCase
     public function shouldParseSingleSelfClosingTag()
     {
         $parser = new Parser('<div/>');
-        $this->assertEquals([
-            'identifier' => 'div',
-            'props' => [],
-            'children' => [],
-            'selfClosing' => true
-        ], $parser->parse());
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'div',
+                        'props' => [],
+                        'children' => [],
+                        'selfClosing' => true
+                    ]
+                ]
+            ],
+            $parser->parse()
+        );
     }
 
     /**
@@ -39,12 +59,21 @@ class ParserTest extends TestCase
     public function shouldParseSingleSelfClosingTagWithWhitespaces()
     {
         $parser = new Parser('<div   />');
-        $this->assertEquals([
-            'identifier' => 'div',
-            'props' => [],
-            'children' => [],
-            'selfClosing' => true
-        ], $parser->parse());
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'div',
+                        'props' => [],
+                        'children' => [],
+                        'selfClosing' => true
+                    ]
+                ]
+            ],
+            $parser->parse()
+        );
     }
 
     /**
@@ -53,12 +82,21 @@ class ParserTest extends TestCase
     public function shouldParseSingleTagWithWhitespaces()
     {
         $parser = new Parser('<div   ></div>');
-        $this->assertEquals([
-            'identifier' => 'div',
-            'props' => [],
-            'children' => [],
-            'selfClosing' => false
-        ], $parser->parse());
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'div',
+                        'props' => [],
+                        'children' => [],
+                        'selfClosing' => false
+                    ]
+                ]
+            ],
+            $parser->parse()
+        );
     }
 
     /**
@@ -67,17 +105,26 @@ class ParserTest extends TestCase
     public function shouldParseSingleSelfClosingTagWithSingleAttribute()
     {
         $parser = new Parser('<div prop="value"/>');
-        $this->assertEquals([
-            'identifier' => 'div',
-            'props' => [
-                'prop' => [
-                    'type' => 'string',
-                    'payload' => 'value'
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'div',
+                        'props' => [
+                            'prop' => [
+                                'type' => 'string',
+                                'payload' => 'value'
+                            ]
+                        ],
+                        'children' => [],
+                        'selfClosing' => true
+                    ]
                 ]
             ],
-            'children' => [],
-            'selfClosing' => true
-        ], $parser->parse());
+            $parser->parse()
+        );
     }
 
     /**
@@ -86,21 +133,31 @@ class ParserTest extends TestCase
     public function shouldParseSingleSelfClosingTagWithMultipleAttributes()
     {
         $parser = new Parser('<div prop="value" anotherProp="Another Value"/>');
-        $this->assertEquals([
-            'identifier' => 'div',
-            'props' => [
-                'prop' => [
-                    'type' => 'string',
-                    'payload' => 'value'
-                ],
-                'anotherProp' => [
-                    'type' => 'string',
-                    'payload' => 'Another Value'
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'div',
+                        'props' => [
+                            'prop' => [
+                                'type' => 'string',
+                                'payload' => 'value'
+                            ],
+                            'anotherProp' => [
+                                'type' => 'string',
+                                'payload' => 'Another Value'
+                            ]
+                        ],
+                        'children' => [],
+                        'selfClosing' => true
+                    ]
                 ]
             ],
-            'children' => [],
-            'selfClosing' => true
-        ], $parser->parse());
+            $parser->parse()
+        );
+
     }
 
     /**
@@ -109,21 +166,169 @@ class ParserTest extends TestCase
     public function shouldParseSingleSelfClosingTagWithMultipleAttributesWrappedByMultipleWhitespaces()
     {
         $parser = new Parser('<div   prop="value"    anotherProp="Another Value"  />');
-        $this->assertEquals([
-            'identifier' => 'div',
-            'props' => [
-                'prop' => [
-                    'type' => 'string',
-                    'payload' => 'value'
-                ],
-                'anotherProp' => [
-                    'type' => 'string',
-                    'payload' => 'Another Value'
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'div',
+                        'props' => [
+                            'prop' => [
+                                'type' => 'string',
+                                'payload' => 'value'
+                            ],
+                            'anotherProp' => [
+                                'type' => 'string',
+                                'payload' => 'Another Value'
+                            ]
+                        ],
+                        'children' => [],
+                        'selfClosing' => true
+                    ]
                 ]
             ],
-            'children' => [],
-            'selfClosing' => true
-        ], $parser->parse());
+            $parser->parse()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldParseListOfTags()
+    {
+        $parser = new Parser('<div></div><span></span><h1></h1>');
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'div',
+                        'props' => [],
+                        'children' => [],
+                        'selfClosing' => false
+                    ]
+                ],
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'span',
+                        'props' => [],
+                        'children' => [],
+                        'selfClosing' => false
+                    ]
+                ],
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'h1',
+                        'props' => [],
+                        'children' => [],
+                        'selfClosing' => false
+                    ]
+                ]
+            ],
+            $parser->parse()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldParseListOfTagsAndTextsWithTextOutside()
+    {
+        $parser = new Parser('foo<div></div>bar');
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'text',
+                    'payload' => 'foo'
+                ],
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'div',
+                        'props' => [],
+                        'children' => [],
+                        'selfClosing' => false
+                    ]
+                ],
+                [
+                    'type' => 'text',
+                    'payload' => 'bar'
+                ]
+            ],
+            $parser->parse()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldParseListOfTagsAndTextsWithTagsOutside()
+    {
+        $parser = new Parser('<div></div>foobar<span></span>');
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'div',
+                        'props' => [],
+                        'children' => [],
+                        'selfClosing' => false
+                    ]
+                ],
+                [
+                    'type' => 'text',
+                    'payload' => 'foobar'
+                ],
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'span',
+                        'props' => [],
+                        'children' => [],
+                        'selfClosing' => false
+                    ]
+                ]
+            ],
+            $parser->parse()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldParseListOfTagsAndTextsWithWhitepaceOutside()
+    {
+        $parser = new Parser('    <div></div>    ');
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'text',
+                    'payload' => '    '
+                ],
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'div',
+                        'props' => [],
+                        'children' => [],
+                        'selfClosing' => false
+                    ]
+                ],
+                [
+                    'type' => 'text',
+                    'payload' => '    '
+                ]
+            ],
+            $parser->parse()
+        );
     }
 
     /**
@@ -132,21 +337,30 @@ class ParserTest extends TestCase
     public function propsCanHaveDashesInTheirName()
     {
         $parser = new Parser('<div prop-1="value" prop-2="Another Value"/>');
-        $this->assertEquals([
-            'identifier' => 'div',
-            'props' => [
-                'prop-1' => [
-                    'type' => 'string',
-                    'payload' => 'value'
-                ],
-                'prop-2' => [
-                    'type' => 'string',
-                    'payload' => 'Another Value'
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'div',
+                        'props' => [
+                            'prop-1' => [
+                                'type' => 'string',
+                                'payload' => 'value'
+                            ],
+                            'prop-2' => [
+                                'type' => 'string',
+                                'payload' => 'Another Value'
+                            ]
+                        ],
+                        'children' => [],
+                        'selfClosing' => true
+                    ]
                 ]
             ],
-            'children' => [],
-            'selfClosing' => true
-        ], $parser->parse());
+            $parser->parse()
+        );
     }
 
     /**
@@ -155,12 +369,22 @@ class ParserTest extends TestCase
     public function shouldParseSingleTagWithSeparateClosingTag()
     {
         $parser = new Parser('<div></div>');
-        $this->assertEquals([
-            'identifier' => 'div',
-            'props' => [],
-            'children' => [],
-            'selfClosing' => false
-        ], $parser->parse());
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'div',
+                        'props' => [],
+                        'children' => [],
+                        'selfClosing' => false
+                    ]
+                ]
+            ],
+            $parser->parse()
+        );
+
     }
 
     /**
@@ -169,77 +393,9 @@ class ParserTest extends TestCase
     public function shouldParseSingleTagWithSeparateClosingTagAndOneChild()
     {
         $parser = new Parser('<div>Hello World!</div>');
-        $this->assertEquals([
-            'identifier' => 'div',
-            'props' => [],
-            'children' => [
-                [
-                    'type' => 'text',
-                    'payload' => 'Hello World!'
-                ]
-            ],
-            'selfClosing' => false
-        ], $parser->parse());
-    }
 
-    /**
-     * @test
-     */
-    public function shouldParseNestedSelfClosingTag()
-    {
-        $parser = new Parser('<div><input/></div>');
-        $this->assertEquals([
-            'identifier' => 'div',
-            'props' => [],
-            'children' => [
-                [
-                    'type' => 'node',
-                    'payload' => [
-                        'identifier' => 'input',
-                        'props' => [],
-                        'children' => [],
-                        'selfClosing' => true
-                    ]
-                ]
-            ],
-            'selfClosing' => false
-        ], $parser->parse());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldParseNestedTags()
-    {
-        $parser = new Parser('<article><header><div>Header</div></header><div>Content</div><footer><div>Footer</div></footer></article>');
-        $this->assertEquals([
-            'identifier' => 'article',
-            'props' => [],
-            'children' => [
-                [
-                    'type' => 'node',
-                    'payload' => [
-                        'identifier' => 'header',
-                        'props' => [],
-                        'children' => [
-                            [
-                                'type' => 'node',
-                                'payload' => [
-                                    'identifier' => 'div',
-                                    'props' => [],
-                                    'children' => [
-                                        [
-                                            'type' => 'text',
-                                            'payload' => 'Header'
-                                        ]
-                                    ],
-                                    'selfClosing' => false
-                                ]
-                            ]
-                        ],
-                        'selfClosing' => false
-                    ]
-                ],
+        $this->assertEquals(
+            [
                 [
                     'type' => 'node',
                     'payload' => [
@@ -248,18 +404,89 @@ class ParserTest extends TestCase
                         'children' => [
                             [
                                 'type' => 'text',
-                                'payload' => 'Content'
+                                'payload' => 'Hello World!'
                             ]
                         ],
                         'selfClosing' => false
                     ]
-                ],
+                ]
+            ],
+            $parser->parse()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldParseNestedSelfClosingTag()
+    {
+        $parser = new Parser('<div><input/></div>');
+
+        $this->assertEquals(
+            [
                 [
                     'type' => 'node',
                     'payload' => [
-                        'identifier' => 'footer',
+                        'identifier' => 'div',
                         'props' => [],
                         'children' => [
+                            [
+                                'type' => 'node',
+                                'payload' => [
+                                    'identifier' => 'input',
+                                    'props' => [],
+                                    'children' => [],
+                                    'selfClosing' => true
+                                ]
+                            ]
+                        ],
+                        'selfClosing' => false
+                    ]
+                ]
+            ],
+            $parser->parse()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldParseNestedTags()
+    {
+        $parser = new Parser('<article><header><div>Header</div></header><div>Content</div><footer><div>Footer</div></footer></article>');
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'article',
+                        'props' => [],
+                        'children' => [
+                            [
+                                'type' => 'node',
+                                'payload' => [
+                                    'identifier' => 'header',
+                                    'props' => [],
+                                    'children' => [
+                                        [
+                                            'type' => 'node',
+                                            'payload' => [
+                                                'identifier' => 'div',
+                                                'props' => [],
+                                                'children' => [
+                                                    [
+                                                        'type' => 'text',
+                                                        'payload' => 'Header'
+                                                    ]
+                                                ],
+                                                'selfClosing' => false
+                                            ]
+                                        ]
+                                    ],
+                                    'selfClosing' => false
+                                ]
+                            ],
                             [
                                 'type' => 'node',
                                 'payload' => [
@@ -268,7 +495,31 @@ class ParserTest extends TestCase
                                     'children' => [
                                         [
                                             'type' => 'text',
-                                            'payload' => 'Footer'
+                                            'payload' => 'Content'
+                                        ]
+                                    ],
+                                    'selfClosing' => false
+                                ]
+                            ],
+                            [
+                                'type' => 'node',
+                                'payload' => [
+                                    'identifier' => 'footer',
+                                    'props' => [],
+                                    'children' => [
+                                        [
+                                            'type' => 'node',
+                                            'payload' => [
+                                                'identifier' => 'div',
+                                                'props' => [],
+                                                'children' => [
+                                                    [
+                                                        'type' => 'text',
+                                                        'payload' => 'Footer'
+                                                    ]
+                                                ],
+                                                'selfClosing' => false
+                                            ]
                                         ]
                                     ],
                                     'selfClosing' => false
@@ -279,8 +530,10 @@ class ParserTest extends TestCase
                     ]
                 ]
             ],
-            'selfClosing' => false
-        ], $parser->parse());
+            $parser->parse()
+        );
+
+
     }
 
     /**
@@ -294,40 +547,58 @@ class ParserTest extends TestCase
 
 					Text</label>
 							     </div>   ');
-        $this->assertEquals([
-            'identifier' => 'div',
-            'props' => [],
-            'children' => [
+
+        $this->assertEquals(
+            [
                 [
                     'type' => 'text',
-                    'payload' => '
-							'
+                    'payload' => '   '
                 ],
                 [
                     'type' => 'node',
                     'payload' => [
-                        'identifier' => 'input',
-                        'props' => [],
-                        'children' => [],
-                        'selfClosing' => true
-                    ]
-                ],
-                [
-                    'type' => 'text',
-                    'payload' => '
-					'
-                ],
-                [
-                    'type' => 'node',
-                    'payload' => [
-                        'identifier' => 'label',
+                        'identifier' => 'div',
                         'props' => [],
                         'children' => [
                             [
                                 'type' => 'text',
-                                'payload' => 'Some
+                                'payload' => '
+							'
+                            ],
+                            [
+                                'type' => 'node',
+                                'payload' => [
+                                    'identifier' => 'input',
+                                    'props' => [],
+                                    'children' => [],
+                                    'selfClosing' => true
+                                ]
+                            ],
+                            [
+                                'type' => 'text',
+                                'payload' => '
+					'
+                            ],
+                            [
+                                'type' => 'node',
+                                'payload' => [
+                                    'identifier' => 'label',
+                                    'props' => [],
+                                    'children' => [
+                                        [
+                                            'type' => 'text',
+                                            'payload' => 'Some
 
 					Text'
+                                        ]
+                                    ],
+                                    'selfClosing' => false
+                                ]
+                            ],
+                            [
+                                'type' => 'text',
+                                'payload' => '
+							     '
                             ]
                         ],
                         'selfClosing' => false
@@ -335,12 +606,11 @@ class ParserTest extends TestCase
                 ],
                 [
                     'type' => 'text',
-                    'payload' => '
-							     '
+                    'payload' => '   '
                 ]
             ],
-            'selfClosing' => false
-        ], $parser->parse());
+            $parser->parse()
+        );
     }
 
     /**
