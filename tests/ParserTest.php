@@ -8,6 +8,37 @@ class ParserTest extends TestCase
     /**
      * @test
      */
+    public function shouldParseEmptyCode()
+    {
+        $parser = new Parser('');
+
+        $this->assertEquals(
+            [],
+            $parser->parse()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldParseBlankCode()
+    {
+        $parser = new Parser('    ');
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'text',
+                    'payload' => '    '
+                ]
+            ],
+            $parser->parse()
+        );
+    }
+
+    /**
+     * @test
+     */
     public function shouldParseSingleTag()
     {
         $parser = new Parser('<div></div>');
