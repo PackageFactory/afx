@@ -36,7 +36,7 @@ class Lexer
     public function __construct($string)
     {
         $this->string = $string;
-        $this->currentCharacter = $string{0};
+        $this->currentCharacter = ($string !== '') ? $string{0} : null;
         $this->characterPosition = 0;
     }
 
