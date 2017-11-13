@@ -1,4 +1,6 @@
 <?php
+namespace PackageFactory\Afx\Tests;
+
 use PHPUnit\Framework\TestCase;
 use PackageFactory\Afx\Parser;
 

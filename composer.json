@@ -13,10 +13,19 @@
     "require-dev": {
         "phpunit/phpunit": "^5.7"
     },
-	"autoload": {
+    "autoload": {
         "psr-4": { "PackageFactory\\Afx\\": "src/" }
     },
+    "autoload-dev": {
+      "psr-4": { "PackageFactory\\Afx\\Tests\\": "tests/" }
+    },
     "scripts": {
-        "test": "./vendor/bin/phpunit"
+      "test:functional": [
+        "composer install",
+        "vendor/bin/phpunit tests"
+      ],
+      "test": [
+        "composer test:functional"
+      ]
     }
 }
