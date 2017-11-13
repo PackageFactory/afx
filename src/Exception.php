@@ -6,5 +6,4 @@ namespace PackageFactory\Afx;
  */
 class Exception extends \Exception
 {
-
 }

@@ -11,7 +11,6 @@ class NodeList
         $contents = [];
         $currentText = '';
         while (!$lexer->isEnd()) {
-
             if ($lexer->isOpeningBracket()) {
                 $lexer->consume();
 
