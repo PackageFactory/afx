@@ -190,7 +190,6 @@ class ParserTest extends TestCase
             ],
             $parser->parse()
         );
-
     }
 
     /**
@@ -417,7 +416,6 @@ class ParserTest extends TestCase
             ],
             $parser->parse()
         );
-
     }
 
     /**
@@ -565,8 +563,6 @@ class ParserTest extends TestCase
             ],
             $parser->parse()
         );
-
-
     }
 
     /**
