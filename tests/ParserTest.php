@@ -1,4 +1,6 @@
 <?php
+namespace PackageFactory\Afx\Tests;
+
 use PHPUnit\Framework\TestCase;
 use PackageFactory\Afx\Parser;
 
@@ -188,7 +190,6 @@ class ParserTest extends TestCase
             ],
             $parser->parse()
         );
-
     }
 
     /**
@@ -415,7 +416,6 @@ class ParserTest extends TestCase
             ],
             $parser->parse()
         );
-
     }
 
     /**
@@ -563,8 +563,6 @@ class ParserTest extends TestCase
             ],
             $parser->parse()
         );
-
-
     }
 
     /**
