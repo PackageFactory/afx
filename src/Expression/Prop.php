@@ -27,14 +27,14 @@ class Prop
 
                 case $lexer->isOpeningBrace():
                     $expression = Expression::parse($lexer);
-					if (is_string($expression)) {
-						$value = [
-							'type' => 'expression',
-							'payload' => $expression
-						];
-					} else {
-						$value = $expression;
-					}
+                    if (is_string($expression)) {
+                        $value = [
+                            'type' => 'expression',
+                            'payload' => $expression
+                        ];
+                    } else {
+                        $value = $expression;
+                    }
                     break;
                 default:
                     throw new Exception(sprintf(

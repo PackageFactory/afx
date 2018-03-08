@@ -686,8 +686,8 @@ class ParserTest extends TestCase
     public function shouldParsePropsContainingTagsWithLineBreaks()
     {
         $parser = new Parser('<collection itemRenderer={
-			<div>Foo Bar</div>
-		}/>');
+            <div>Foo Bar</div>
+        }/>');
 
         $this->assertEquals(
             [

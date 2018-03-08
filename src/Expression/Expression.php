@@ -40,15 +40,15 @@ class Expression
         }
     }
 
-	protected static function postProcessContents($contents)
-	{
-		$trimmedContents = trim($contents);
+    protected static function postProcessContents($contents)
+    {
+        $trimmedContents = trim($contents);
 
-		if ($trimmedContents{0} === '<') {
-			$parser = new Parser($trimmedContents);
-			return $parser->parse()[0];
-		}
+        if ($trimmedContents{0} === '<') {
+            $parser = new Parser($trimmedContents);
+            return $parser->parse()[0];
+        }
 
-		return $contents;
-	}
+        return $contents;
+    }
 }
