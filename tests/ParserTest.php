@@ -644,6 +644,84 @@ class ParserTest extends TestCase
 
     /**
      * @test
+     */
+    public function shouldParsePropsContainingTags()
+    {
+        $parser = new Parser('<collection itemRenderer={<li>Hello World!</li>}/>');
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'collection',
+                        'props' => [
+                            'itemRenderer' => [
+                                'type' => 'node',
+                                'payload' => [
+                                    'identifier' => 'li',
+                                    'props' => [],
+                                    'children' => [
+                                        [
+                                            'type' => 'text',
+                                            'payload' => 'Hello World!'
+                                        ]
+                                    ],
+                                    'selfClosing' => false
+                                ]
+                            ]
+                        ],
+                        'children' => [],
+                        'selfClosing' => true
+                    ]
+                ]
+            ],
+            $parser->parse()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldParsePropsContainingTagsWithLineBreaks()
+    {
+        $parser = new Parser('<collection itemRenderer={
+			<div>Foo Bar</div>
+		}/>');
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'collection',
+                        'props' => [
+                            'itemRenderer' => [
+                                'type' => 'node',
+                                'payload' => [
+                                    'identifier' => 'div',
+                                    'props' => [],
+                                    'children' => [
+                                        [
+                                            'type' => 'text',
+                                            'payload' => 'Foo Bar'
+                                        ]
+                                    ],
+                                    'selfClosing' => false
+                                ]
+                            ]
+                        ],
+                        'children' => [],
+                        'selfClosing' => true
+                    ]
+                ]
+            ],
+            $parser->parse()
+        );
+    }
+
+    /**
+     * @test
      * @expectedException \PackageFactory\Afx\Exception
      */
     public function shouldThrowExceptionForUnclosedTag()
