@@ -3,6 +3,7 @@ namespace PackageFactory\Afx\Expression;
 
 use PackageFactory\Afx\Exception;
 use PackageFactory\Afx\Lexer;
+use PackageFactory\Afx\Parser;
 
 class Expression
 {
@@ -29,7 +30,7 @@ class Expression
             if ($lexer->isClosingBrace()) {
                 if ($braceCount === 0) {
                     $lexer->consume();
-                    return $contents;
+                    return self::postProcessContents($contents);
                 }
 
                 $braceCount--;
@@ -37,5 +38,17 @@ class Expression
 
             $contents .= $lexer->consume();
         }
+    }
+
+    protected static function postProcessContents($contents)
+    {
+        $trimmedContents = trim($contents);
+
+        if ($trimmedContents{0} === '<') {
+            $parser = new Parser($trimmedContents);
+            return $parser->parse()[0];
+        }
+
+        return $contents;
     }
 }

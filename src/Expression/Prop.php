@@ -26,10 +26,15 @@ class Prop
                     break;
 
                 case $lexer->isOpeningBrace():
-                    $value = [
-                        'type' => 'expression',
-                        'payload' => Expression::parse($lexer)
-                    ];
+                    $expression = Expression::parse($lexer);
+                    if (is_string($expression)) {
+                        $value = [
+                            'type' => 'expression',
+                            'payload' => $expression
+                        ];
+                    } else {
+                        $value = $expression;
+                    }
                     break;
                 default:
                     throw new Exception(sprintf(
