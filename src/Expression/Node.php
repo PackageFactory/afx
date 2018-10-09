@@ -8,10 +8,6 @@ class Node
 {
     public static function parse(Lexer $lexer)
     {
-        while ($lexer->isWhitespace()) {
-            $lexer->consume();
-        }
-
         if ($lexer->isOpeningBracket()) {
             $lexer->consume();
         }

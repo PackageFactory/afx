@@ -211,6 +211,17 @@ class Lexer
     }
 
     /**
+     * Checks if the current character is an exclamation mark
+     *
+     * @return boolean
+     */
+    public function isExclamationMark()
+    {
+        return $this->currentCharacter === '!';
+    }
+
+
+    /**
      * Checks if the iteration has ended
      *
      * @return boolean
@@ -228,6 +239,21 @@ class Lexer
     public function rewind()
     {
         $this->currentCharacter = $this->string{--$this->characterPosition};
+    }
+
+    /**
+     * Peek several characters in advance and return the next n characters
+     *
+     * @param int $characterNumber
+     * @return string|null
+     */
+    public function peek($characterNumber = 1)
+    {
+        if ($this->characterPosition < strlen($this->string) - 1) {
+            return substr($this->string, $this->characterPosition, $characterNumber);
+        } else {
+            return null;
+        }
     }
 
     /**
