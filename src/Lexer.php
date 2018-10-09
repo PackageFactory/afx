@@ -231,6 +231,21 @@ class Lexer
     }
 
     /**
+     * Peek several characters in advance and return the next n characters
+     *
+     * @param int $characterNumber
+     * @return string|null
+     */
+    public function peek($characterNumber = 1)
+    {
+        if ($this->characterPosition < strlen($this->string) - 1) {
+            return substr($this->string, $this->characterPosition, $characterNumber);
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Returns the current character and moves one step forward
      *
      * @return string|null

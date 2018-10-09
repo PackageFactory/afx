@@ -51,7 +51,7 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [],
                         'selfClosing' => false
                     ]
@@ -76,7 +76,7 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [],
                         'selfClosing' => true
                     ]
@@ -99,7 +99,7 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [],
                         'selfClosing' => true
                     ]
@@ -122,7 +122,7 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [],
                         'selfClosing' => false
                     ]
@@ -145,10 +145,14 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [
-                            'prop' => [
-                                'type' => 'string',
-                                'payload' => 'value'
+                        'attributes' => [
+                            [
+                                'type' => 'prop',
+                                'payload' => [
+                                    'type' => 'string',
+                                    'payload' => 'value',
+                                    'identifier' => 'prop'
+                                ]
                             ]
                         ],
                         'children' => [],
@@ -173,14 +177,22 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [
-                            'prop' => [
-                                'type' => 'string',
-                                'payload' => 'value'
+                        'attributes' => [
+                            [
+                                'type' => 'prop',
+                                'payload' => [
+                                    'type' => 'string',
+                                    'payload' => 'value',
+                                    'identifier' => 'prop'
+                                ]
                             ],
-                            'anotherProp' => [
-                                'type' => 'string',
-                                'payload' => 'Another Value'
+                            [
+                                'type' => 'prop',
+                                'payload' => [
+                                    'type' => 'string',
+                                    'payload' => 'Another Value',
+                                    'identifier' => 'anotherProp'
+                                ]
                             ]
                         ],
                         'children' => [],
@@ -205,14 +217,100 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [
-                            'prop' => [
-                                'type' => 'string',
-                                'payload' => 'value'
+                        'attributes' => [
+                            [
+                                'type' => 'prop',
+                                'payload' => [
+                                    'type' => 'string',
+                                    'payload' => 'value',
+                                    'identifier' => 'prop'
+                                ]
                             ],
-                            'anotherProp' => [
-                                'type' => 'string',
-                                'payload' => 'Another Value'
+                            [
+                                'type' => 'prop',
+                                'payload' => [
+                                    'type' => 'string',
+                                    'payload' => 'Another Value',
+                                    'identifier' => 'anotherProp'
+                                ]
+                            ]
+                        ],
+                        'children' => [],
+                        'selfClosing' => true
+                    ]
+                ]
+            ],
+            $parser->parse()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldParseSpreads()
+    {
+        $parser = new Parser('<div {...item} />');
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'div',
+                        'attributes' => [
+                            [
+                                'type' => 'spread',
+                                'payload' => [
+                                    'type' => 'expression',
+                                    'payload' => 'item'
+                                ]
+                            ]
+                        ],
+                        'children' => [],
+                        'selfClosing' => true
+                    ]
+                ]
+            ],
+            $parser->parse()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldParseSpreadsAndPropsInOrder()
+    {
+        $parser = new Parser('<div foo="string" {...item} bar={expression} />');
+
+        $this->assertEquals(
+            [
+                [
+                    'type' => 'node',
+                    'payload' => [
+                        'identifier' => 'div',
+                        'attributes' => [
+                            [
+                                'type' => 'prop',
+                                'payload' => [
+                                    'type' => 'string',
+                                    'payload' => 'string',
+                                    'identifier' => 'foo'
+                                ]
+                            ],
+                            [
+                                'type' => 'spread',
+                                'payload' => [
+                                    'type' => 'expression',
+                                    'payload' => 'item',
+                                ]
+                            ],
+                            [
+                                'type' => 'prop',
+                                'payload' => [
+                                    'type' => 'expression',
+                                    'payload' => 'expression',
+                                    'identifier' => 'bar'
+                                ]
                             ]
                         ],
                         'children' => [],
@@ -237,7 +335,7 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [],
                         'selfClosing' => false
                     ]
@@ -246,7 +344,7 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'span',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [],
                         'selfClosing' => false
                     ]
@@ -255,7 +353,7 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'h1',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [],
                         'selfClosing' => false
                     ]
@@ -282,7 +380,7 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [],
                         'selfClosing' => false
                     ]
@@ -309,7 +407,7 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [],
                         'selfClosing' => false
                     ]
@@ -322,7 +420,7 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'span',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [],
                         'selfClosing' => false
                     ]
@@ -349,7 +447,7 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [],
                         'selfClosing' => false
                     ]
@@ -376,14 +474,22 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [
-                            'prop-1' => [
-                                'type' => 'string',
-                                'payload' => 'value'
+                        'attributes' => [
+                            [
+                                'type' => 'prop',
+                                'payload' => [
+                                    'type' => 'string',
+                                    'payload' => 'value',
+                                    'identifier' => 'prop-1'
+                                ]
                             ],
-                            'prop-2' => [
-                                'type' => 'string',
-                                'payload' => 'Another Value'
+                            [
+                                'type' => 'prop',
+                                'payload' => [
+                                    'type' => 'string',
+                                    'payload' => 'Another Value',
+                                    'identifier' => 'prop-2'
+                                ]
                             ]
                         ],
                         'children' => [],
@@ -408,7 +514,7 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [],
                         'selfClosing' => false
                     ]
@@ -431,7 +537,7 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [
                             [
                                 'type' => 'text',
@@ -459,13 +565,13 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [
                             [
                                 'type' => 'node',
                                 'payload' => [
                                     'identifier' => 'input',
-                                    'props' => [],
+                                    'attributes' => [],
                                     'children' => [],
                                     'selfClosing' => true
                                 ]
@@ -492,19 +598,19 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'article',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [
                             [
                                 'type' => 'node',
                                 'payload' => [
                                     'identifier' => 'header',
-                                    'props' => [],
+                                    'attributes' => [],
                                     'children' => [
                                         [
                                             'type' => 'node',
                                             'payload' => [
                                                 'identifier' => 'div',
-                                                'props' => [],
+                                                'attributes' => [],
                                                 'children' => [
                                                     [
                                                         'type' => 'text',
@@ -522,7 +628,7 @@ class ParserTest extends TestCase
                                 'type' => 'node',
                                 'payload' => [
                                     'identifier' => 'div',
-                                    'props' => [],
+                                    'attributes' => [],
                                     'children' => [
                                         [
                                             'type' => 'text',
@@ -536,13 +642,13 @@ class ParserTest extends TestCase
                                 'type' => 'node',
                                 'payload' => [
                                     'identifier' => 'footer',
-                                    'props' => [],
+                                    'attributes' => [],
                                     'children' => [
                                         [
                                             'type' => 'node',
                                             'payload' => [
                                                 'identifier' => 'div',
-                                                'props' => [],
+                                                'attributes' => [],
                                                 'children' => [
                                                     [
                                                         'type' => 'text',
@@ -587,7 +693,7 @@ class ParserTest extends TestCase
                     'type' => 'node',
                     'payload' => [
                         'identifier' => 'div',
-                        'props' => [],
+                        'attributes' => [],
                         'children' => [
                             [
                                 'type' => 'text',
@@ -598,7 +704,7 @@ class ParserTest extends TestCase
                                 'type' => 'node',
                                 'payload' => [
                                     'identifier' => 'input',
-                                    'props' => [],
+                                    'attributes' => [],
                                     'children' => [],
                                     'selfClosing' => true
                                 ]
@@ -612,7 +718,7 @@ class ParserTest extends TestCase
                                 'type' => 'node',
                                 'payload' => [
                                     'identifier' => 'label',
-                                    'props' => [],
+                                    'attributes' => [],
                                     'children' => [
                                         [
                                             'type' => 'text',
@@ -678,7 +784,7 @@ class ParserTest extends TestCase
      */
     public function shouldThrowExceptionForUnclosedAttributeExpression()
     {
-        $parser = new Parser('<div foo={bar()/>');
+        $parser = new Parser('<div foo={bar() />');
         $parser->parse();
     }
 
@@ -689,6 +795,16 @@ class ParserTest extends TestCase
     public function shouldThrowExceptionForUnclosedContentExpression()
     {
         $parser = new Parser('<div>{bar()</div>');
+        $parser->parse();
+    }
+
+    /**
+     * @test
+     * @expectedException \PackageFactory\Afx\Exception
+     */
+    public function shouldThrowExceptionForUnclosedSpreadExpression()
+    {
+        $parser = new Parser('<div {...bar() />');
         $parser->parse();
     }
 }

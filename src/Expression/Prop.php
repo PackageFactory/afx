@@ -8,10 +8,6 @@ class Prop
 {
     public static function parse(Lexer $lexer)
     {
-        while ($lexer->isWhitespace()) {
-            $lexer->consume();
-        }
-
         $identifier = Identifier::parse($lexer);
 
         if ($lexer->isEqualSign()) {
@@ -21,14 +17,16 @@ class Prop
                 case $lexer->isDoubleQuote():
                     $value = [
                         'type' => 'string',
-                        'payload' => StringLiteral::parse($lexer)
+                        'payload' => StringLiteral::parse($lexer),
+                        'identifier' => $identifier
                     ];
                     break;
 
                 case $lexer->isOpeningBrace():
                     $value = [
                         'type' => 'expression',
-                        'payload' => Expression::parse($lexer)
+                        'payload' => Expression::parse($lexer),
+                        'identifier' => $identifier
                     ];
                     break;
                 default:
@@ -40,12 +38,13 @@ class Prop
         } elseif ($lexer->isWhiteSpace() || $lexer->isForwardSlash() || $lexer->isClosingBracket()) {
             $value = [
                 'type' => 'boolean',
-                'payload' => true
+                'payload' => true,
+                'identifier' => $identifier
             ];
         } else {
             throw new Exception(sprintf('Prop identifier "%s" is neither assignment nor boolean', $identifier));
         }
 
-        return [$identifier, $value];
+        return $value;
     }
 }
