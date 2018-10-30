@@ -8,10 +8,6 @@ class Node
 {
     public static function parse(Lexer $lexer)
     {
-        while ($lexer->isWhitespace()) {
-            $lexer->consume();
-        }
-
         if ($lexer->isOpeningBracket()) {
             $lexer->consume();
         }
@@ -19,7 +15,7 @@ class Node
         $identifier = Identifier::parse($lexer);
 
         try {
-            $props = [];
+            $attributes = [];
             $children = [];
 
             if ($lexer->isWhitespace()) {
@@ -27,8 +23,17 @@ class Node
                     $lexer->consume();
                 }
                 while (!$lexer->isForwardSlash() && !$lexer->isClosingBracket()) {
-                    list($propIdentifier, $value) = Prop::parse($lexer);
-                    $props[$propIdentifier] = $value;
+                    if ($lexer->isOpeningBrace()) {
+                        $attributes[] = [
+                            'type' => 'spread',
+                            'payload' => Spread::parse($lexer)
+                        ];
+                    } else {
+                        $attributes[] = [
+                            'type' => 'prop',
+                            'payload' => Prop::parse($lexer)
+                        ];
+                    }
                     while ($lexer->isWhitespace()) {
                         $lexer->consume();
                     }
@@ -43,7 +48,7 @@ class Node
 
                     return [
                         'identifier' => $identifier,
-                        'props' => $props,
+                        'attributes' => $attributes,
                         'children' => $children,
                         'selfClosing' => true
                     ];
@@ -92,7 +97,7 @@ class Node
                 $lexer->consume();
                 return [
                     'identifier' => $identifier,
-                    'props' => $props,
+                    'attributes' => $attributes,
                     'children' => $children,
                     'selfClosing' => false
                 ];
